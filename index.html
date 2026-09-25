@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+  <meta name="theme-color" content="#0d1117" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Workout" />
+  <meta name="description" content="Steven's home workout logger — Stronglifts-style PWA" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>Steven Workout</title>
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <h1 id="header-title">Steven Workout</h1>
+      <div class="sub" id="header-sub">Home · local only</div>
+    </div>
+  </header>
+
+  <!-- HOME -->
+  <section id="view-home" class="view active">
+    <div id="suggested-card" class="card suggested" style="display:none">
+      <div class="label">Today's suggested</div>
+      <h2 id="suggested-title"></h2>
+      <div class="meta" id="suggested-meta"></div>
+      <button class="primary block" id="btn-start-suggested">Start workout</button>
+    </div>
+
+    <div class="card">
+      <h2>Pick a session</h2>
+      <div class="meta">Any day · Full or Short</div>
+      <div class="grid-2" id="session-grid"></div>
+    </div>
+
+    <div class="card">
+      <h2>Near-term schedule</h2>
+      <ul class="schedule-list" id="schedule-list"></ul>
+    </div>
+
+    <div class="card">
+      <h2>Rules</h2>
+      <ol class="rules">
+        <li><strong>StretchTrainer:</strong> ≥15 min Precor before every workout.</li>
+        <li><strong>Pull-ups:</strong> Band-assisted or Unitree PUMP lat pulldown; add slow negatives when ready.</li>
+        <li><strong>Kettlebell:</strong> Only as written (Legs full optional swings; Legs short as Nordics alt; Day D short goblet). No extra Push/Pull KB.</li>
+        <li>Leave ~2 RIR. On short OSM days prioritize compounds.</li>
+        <li><strong>Unitree PUMP</strong> = cable station.</li>
+      </ol>
+    </div>
+
+    <div id="resume-card" class="card" style="display:none">
+      <h2>Resume in-progress</h2>
+      <div class="meta" id="resume-meta"></div>
+      <div class="flex">
+        <button class="primary flex-1" id="btn-resume">Resume</button>
+        <button class="danger" id="btn-discard">Discard</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORKOUT -->
+  <section id="view-workout" class="view">
+    <div id="workout-content"></div>
+    <div class="finish-bar">
+      <button class="primary block" id="btn-finish">Finish workout</button>
+      <button class="ghost block mt-8" id="btn-cancel-workout">Cancel</button>
+    </div>
+  </section>
+
+  <!-- HISTORY -->
+  <section id="view-history" class="view">
+    <div id="history-list"></div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section id="view-settings" class="view">
+    <div class="card">
+      <h2>Settings</h2>
+      <div class="settings-row">
+        <label for="rest-default">Default rest (sec)</label>
+        <input type="number" id="rest-default" min="30" max="600" step="15" value="90" />
+      </div>
+      <div class="settings-row">
+        <label for="stretch-default">StretchTrainer (sec)</label>
+        <input type="number" id="stretch-default" min="60" max="1800" step="60" value="900" />
+      </div>
+      <p class="muted mt-16" style="font-size:0.85rem">
+        All logs stay on this phone (localStorage). Clearing browser data or uninstalling the home-screen app can erase history.
+      </p>
+      <button class="danger block mt-16" id="btn-export">Export history (JSON)</button>
+      <button class="ghost block mt-8" id="btn-clear-history">Clear all history</button>
+    </div>
+  </section>
+
+  <!-- Rest timer sheet -->
+  <div class="rest-overlay" id="rest-overlay">
+    <div class="rest-sheet">
+      <div class="rest-label">Rest</div>
+      <div class="rest-time" id="rest-display">1:30</div>
+      <div class="rest-edit">
+        <span>Seconds</span>
+        <input type="number" id="rest-seconds" min="15" max="600" step="15" value="90" />
+      </div>
+      <div class="rest-actions">
+        <button class="ghost" id="rest-skip">Skip</button>
+        <button class="primary" id="rest-done">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm modal -->
+  <div class="modal-backdrop" id="modal">
+    <div class="modal">
+      <h3 id="modal-title">Confirm</h3>
+      <p id="modal-body"></p>
+      <div class="actions">
+        <button class="ghost" id="modal-cancel">Cancel</button>
+        <button class="primary" id="modal-ok">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav" id="bottom-nav">
+    <button data-view="home" class="active"><span class="icon">🏠</span>Home</button>
+    <button data-view="workout"><span class="icon">💪</span>Workout</button>
+    <button data-view="history"><span class="icon">📋</span>History</button>
+    <button data-view="settings"><span class="icon">⚙️</span>Settings</button>
+  </nav>
+
+  <script src="app.js"></script>
+</body>
+</html>
